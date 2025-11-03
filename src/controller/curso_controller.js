@@ -1,5 +1,6 @@
 
 const CursoSchema = require("../model/curso.js");
+const mongoose = require('mongoose')
 
 const crearCurso = async(req, res) =>{
     try {
@@ -56,14 +57,104 @@ const crearCurso = async(req, res) =>{
             });
 
     } catch (error) {
-        res
-            .status(500)
-            .json({
-                msg: `Se produjo un error inesperado: ${error.message}`,
-            });
+        res.status(500).json({
+            rror: "Se produjo un error inesperado:" + error.message
+        });
     }
 }
 
+const verCursos = async (req, res) =>{
+    try {
+        let cursos;
+        cursos = await CursoSchema.find().select("_id name description duration organization imagen")
+        
+        if(cursos.length==0){
+            return res
+                .status(200)
+                .json({
+                    msg: `No se encontro ningun curso`
+                })
+        }
+    
+        res
+            .status(200)
+            .json({cursos})
+
+    } catch (error) {
+        res.status(400).json({
+            error: "Se produjo un error inesperado:" + error.message
+        });        
+    }
+}
+
+const actualizarCurso = async (req, res)=>{
+    try {
+        const {id} = req.params
+        const { name, description, duration, organization } = req.body;
+        const cursoEncontrado = await CursoSchema.findById({_id:id})
+    
+        if(!cursoEncontrado){
+            return res
+                .status(400)
+                .json({
+                    msg: "No se encontro el curso ingresado"
+                })
+        }
+    
+        cursoEncontrado.name = name
+        cursoEncontrado.description = description
+        cursoEncontrado.duration = duration
+        cursoEncontrado.organization = organization
+        await cursoEncontrado.save()
+    
+        res
+            .status(200)
+            .json({
+                msg: "Datos actualizados exitosamente"
+            })
+
+    } catch (error) {
+        res.status(400).json({
+            error: "Se produjo un error inesperado:" + error.message
+        });  
+    }
+}
+
+const eliminarCurso = async(req, res) => {
+
+    try {
+        const {id} = req.params
+        const cursoEncontrado = await CursoSchema.findById({_id:id})
+    
+        if(!cursoEncontrado){
+            return res
+                .status(200)
+                .json({
+                    msg : "No se encontro el curso ingresado"
+                })
+        }
+
+        await cursoEncontrado.deleteOne({_id:id})
+
+        res
+            .status(200)
+            .json({
+                msg: "Curso eliminado exitosamente"
+            })
+        
+    } catch (error) {
+        res
+            .status(404)
+            .json({
+                error: "Se produjo un error inesperado:" + error.message,
+            });  
+    }
+}
+
+
 module.exports = {
-    crearCurso
+    crearCurso,
+    verCursos,
+    actualizarCurso,
+    eliminarCurso
 }
