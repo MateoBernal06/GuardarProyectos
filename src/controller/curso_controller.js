@@ -3,11 +3,11 @@ const CursoSchema = require("../model/curso.js");
 
 const crearCurso = async(req, res) =>{
     try {
-        const {name, description, duration, organization, imagen} = req.body
-        if(!name || !description || !duration|| !organization || !imagen){
+        const {name, description, duration, organization} = req.body
+        if(!name || !description || !duration|| !organization ){
             return res
                 .status(400)
-                .send({
+                .json({
                     msg: "Todos los Campos obligatorios"
                 })
         }
@@ -19,7 +19,7 @@ const crearCurso = async(req, res) =>{
         if(compararName){
             return res
                 .status(400)
-                .send({
+                .json({
                     msg: "Un curso ya posee ese nombre"
                 })
         }
@@ -27,36 +27,38 @@ const crearCurso = async(req, res) =>{
         if(!parseInt(duration)){
             return res
                 .status(404)
-                .send({
+                .json({
                     msg: "La duracion del curso no es valida"
                 })
         }
 
+        if (!req.file || !req.file.path) {
+            return res
+                .status(400)
+                .json({ msg: "La imagen es obligatoria" });
+        }
+
         const newCurso = new CursoSchema({
-            name,
-            description,
+            name: name.trim(),
+            description: description.trim(),
             duration,
-            organization,
-            imagen
+            organization: organization.trim(),
+            imagen: req.file.path
         });
 
         await newCurso.save()
 
-        res.status(200).send({
-            msg: "Curso creado exitosamente",
-            datos: {
-                name,
-                description,
-                duration,
-                organization,
-                imagen
-            },
-        });
+        res
+            .status(200)
+            .json({
+                msg: "Curso creado exitosamente",
+                datos: newCurso,
+            });
 
     } catch (error) {
         res
             .status(500)
-            .send({
+            .json({
                 msg: `Se produjo un error inesperado: ${error.message}`,
             });
     }

@@ -15,11 +15,13 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "morgan": "^1.10.1",
+    "cloudinary": "^1.41.3",
     "colors": "^1.4.0",
-    "cloudinary": "^2.8.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mongoose": "^8.19.2"
+    "mongoose": "^8.19.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0"
   }
 }
