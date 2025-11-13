@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cursos = require('./routes/curso.routes.js')
 const proyectos = require('./routes/proyecto.routes.js')
+const email = require('./routes/email.routes.js')
 require('colors')
 const connection = require('./database.js')
 require("dotenv").config();
@@ -20,6 +21,7 @@ app.get('/', (req, res)=>{
 
 app.use('/api', cursos)
 app.use('/api', proyectos)
+app.use('/api', email)
 
 app.use('/', (req, res, next)=>{
     res
