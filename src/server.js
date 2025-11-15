@@ -1,41 +1,37 @@
-const express = require('express')
-const morgan = require('morgan')
-const cursos = require('./routes/curso.routes.js')
-const proyectos = require('./routes/proyecto.routes.js')
-const email = require('./routes/email.routes.js')
-require('colors')
-const connection = require('./database.js')
+const express = require("express");
+const morgan = require("morgan");
+const cursos = require("./routes/curso.routes.js");
+const proyectos = require("./routes/proyecto.routes.js");
+const email = require("./routes/email.routes.js");
+
+require("colors");
+const connection = require("./database.js");
 require("dotenv").config();
-const cors = require('cors')
+const cors = require("cors");
 
-const app = express()
-app.use(morgan('dev'))
-app.use(express.json())
-app.use(cors({origin : process.env.FRONTEND_URL}))
-connection()
+const app = express();
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(cors({ origin: process.env.FRONTEND_URL }));
+connection();
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "0.0.0.0";
+app.get("/", (req, res) => {
+    res.send("Server OK");
+});
 
-app.get('/', (req, res)=>{
-    res.send('Server OK')
-})
+app.use("/api", cursos);
+app.use("/api", proyectos);
+app.use("/api", email);
 
-app.use('/api', cursos)
-app.use('/api', proyectos)
-app.use('/api', email)
+app.use("/", (req, res, next) => {
+    res.status(404).json({
+        status: 404,
+        msg: "Error Not Found 404",
+    });
 
-app.use('/', (req, res, next)=>{
-    res
-        .status(404)
-        .json({
-            status: 404,
-            msg: 'Error Not Found 404'
-        })
-    
-    next()
-})
+    next();
+});
 
-app.listen(PORT, HOST, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Server on Port ${process.env.PORT}`.bgBlue);
 });
