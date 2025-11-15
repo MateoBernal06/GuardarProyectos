@@ -6,10 +6,12 @@ const sendMsg = async(req, res) => {
     try {
         const { name, subject, email, message } = req.body;
     
-        if(!name || !email || !message ||!subject){
-            return res.status(400).json({
-                msg: "Campos vacíos",
-            });
+        if (!name?.trim() || !subject?.trim() || !email?.trim() || !message?.trim()) {
+            return res
+                .status(400)
+                .json({
+                    msg: "Todos los campos son obligatorios y no pueden estar vacíos",
+                });
         }
     
         const datos = {
@@ -40,7 +42,7 @@ const sendMsg = async(req, res) => {
         
     } catch (error) {
         res.status(500).json({
-            msg: `Error inesperado: ${error.message}`,
+            msg: `Error inesperado en el servidor: ${error.message}`,
         });
     }
 }
