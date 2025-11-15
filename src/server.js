@@ -14,6 +14,8 @@ app.use(express.json())
 app.use(cors({origin : process.env.FRONTEND_URL}))
 connection()
 
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || "0.0.0.0";
 
 app.get('/', (req, res)=>{
     res.send('Server OK')
@@ -34,6 +36,6 @@ app.use('/', (req, res, next)=>{
     next()
 })
 
-app.listen(process.env.PORT, ()=>{
-    console.log(`Server on Port ${process.env.PORT}`.bgBlue)
-})
+app.listen(PORT, HOST, () => {
+    console.log(`Server on Port ${process.env.PORT}`.bgBlue);
+});
