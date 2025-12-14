@@ -1,7 +1,7 @@
 
-const app = require('express')
+const express = require('express')
 const {sendMsg} = require('../controller/email.controller.js');
-const routes = app()
+const routes = express.Router()
 
 routes.post('/enviar-email', sendMsg)
 module.exports = routes
