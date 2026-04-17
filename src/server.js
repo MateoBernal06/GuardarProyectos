@@ -3,6 +3,8 @@ const morgan = require("morgan");
 const cursos = require("./routes/curso.routes.js");
 const proyectos = require("./routes/proyecto.routes.js");
 const email = require("./routes/email.routes.js");
+const experiencia = require("./routes/experiencia.routes.js");
+const educacion = require("./routes/educacion.routes.js");
 
 require("colors");
 const connection = require("./database.js");
@@ -24,6 +26,8 @@ app.get("/", (req, res) => {
 app.use("/api", cursos);
 app.use("/api", proyectos);
 app.use("/api", email);
+app.use("/api", experiencia);
+app.use("/api", educacion);
 
 app.use("/", (req, res, next) => {
     res.status(404).json({
