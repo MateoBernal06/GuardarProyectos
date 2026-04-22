@@ -8,6 +8,7 @@ const connection = require("../src/database.js");
 const cursos = require("../src/routes/curso.routes.js");
 const proyectos = require("../src/routes/proyecto.routes.js");
 const email = require("../src/routes/email.routes.js");
+const experiencia = require("../src/routes/experiencia.routes.js")
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api", cursos);
 app.use("/api", proyectos);
 app.use("/api", email);
+app.use("/api", experiencia)
 
 // Manejo de rutas no encontradas
 app.use("/", (req, res, next) => {
