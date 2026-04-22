@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 connection();
 
+
 app.get("/", (req, res) => {
     res.send("Server OK");
 });
